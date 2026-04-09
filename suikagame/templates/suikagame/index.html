@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Webスイカ割り</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .board { font-family: monospace; font-size: 2rem; line-height: 1.2; letter-spacing: 5px; margin: 20px 0; color: #333; }
+        .controls { margin-top: 20px; }
+        button { padding: 10px 20px; font-size: 1rem; cursor: pointer; margin: 5px; }
+        .score-board { margin-top: 40px; padding: 15px; background: #f0f0f0; border-radius: 8px; max-width: 400px;}
+    </style>
+</head>
+<body>
+    <h1>🍉Webスイカ割りゲーム🍉</h1>
+
+    <h3 style="color: #e60000;">{{ msg }}</h3>
+    <p>現在の歩数: {{ steps }}</p>
+
+    <div class="board">
+        {% for row in board %}
+            <div>{% for cell in row %}{{ cell }}{% endfor %}</div>
+        {% endfor %}
+    </div>
+
+    <div class="controls">
+        {% if not is_clear %}
+            <div style="margin-left: 65px;">
+                <a href="?move=n"><button>北 (N)</button></a>
+            </div>
+            <div>
+                <a href="?move=w"><button>西 (W)</button></a>
+                <a href="?move=e"><button>東 (E)</button></a>
+            </div>
+            <div style="margin-left: 65px;">
+                <a href="?move=s"><button>南 (S)</button></a>
+            </div>
+        {% else %}
+            <a href="?move=reset"><button style="background: #ffcc00; font-weight: bold;">もう一度遊ぶ（リセット）</button></a>
+        {% endif %}
+    </div>
+
+    <div class="score-board">
+        <h3>🏆 最近のクリア記録 (DBから取得)</h3>
+        <ul>
+            {% for score in scores %}
+                <li>{{ score.player_name }} : {{ score.steps }}歩でクリア ({{ score.created_at|date:"m/d H:i" }})</li>
+            {% empty %}
+                <li>まだクリア記録がありません。</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
